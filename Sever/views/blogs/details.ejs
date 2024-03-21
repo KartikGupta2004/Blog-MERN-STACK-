@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head.ejs') %>
+<body>
+    <%- include('../partials/nav.ejs') %>
+        <div class="details content">
+            <h2><%= blog.title %></h2>
+            <div class="content">
+                <p><%= blog.body %></p>
+            </div>
+            <a data-doc="<%= blog._id %>" class="delete">
+                <img src="/trashcan.svg" alt="Delete icon">
+            </a>
+            <!-- -DOC is a custom attribute -->
+        </div>
+        <%- include('../partials/footer.ejs') %>
+        <script>
+            const trashcan = document.querySelector('a.delete')
+
+            trashcan.addEventListener('click',(e)=>{
+                const endpoint = `/blogs/${trashcan.dataset.doc}`;
+                fetch(endpoint,{
+                    method:'DELETE'
+                })
+                .then((response)=>response.json())
+                .then((data)=>
+                {
+                    // console.log(data)
+                    window.location.href=data.redirect
+                }
+                )
+                .catch(err => console.log(err))
+            })
+            //  So in deleting below are the steps it undergoes
+            // From frontend we make a Ajax request of delete
+            // In backend we take the id and in response send a JSON
+            // Again in frontend we take the json and take data from itand returns in to the page
+        </script>
+</body>
+</html>
